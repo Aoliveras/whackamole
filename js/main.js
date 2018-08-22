@@ -13,55 +13,59 @@ console.log('JS loaded');
 // 1 log high score on screen
 // Implement levels easy, med, hard
 
+function main() {
 
-//1 Make mole appear on start
-//2 Make timer start
-//global variables
-let start = document.getElementById("start-button");
-let gameTimer = document.getElementById('timer');
-let critter = document.getElementById('mole');
-let startTime;
-let startScore = 0
-let currentScore = document.getElementById('score');
-let holecation = document.getElementsByClassName("hole");
-console.log(holecation);
-//console.log(critter);
-//console.log(gameTimer);
-//console.log(start);
+    let start = document.getElementById("start-button");
+    let gameTimer = document.getElementById('timer');
+    let critter = document.getElementById('mole');
+    let startTime;
+    let startScore = 0
+    let currentScore = document.getElementById('score');
+
+    //console.log(holecation);
+    //console.log(critter);
+    //console.log(gameTimer);
+    //console.log(start);
 
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
+    function toggleMole(displayValue) {
+        mole.style.display = displayValue;
+    }
 
-let randoNumber = getRandomInt(9);
-console.log(randoNumber);
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
 
-function moveHole() {
-    holecation[randoNumber].append(critter);
-    critter.style.display = "inline";
-    //console.log(holecation[randoNumber]);
+
+    function moveHole() {
+        let randoNumber = getRandomInt(9);
+        let holecation = document.getElementsByClassName("hole");
+        holecation[randoNumber].append(critter);
+    };
+
+    function startGo() {
+        startTime = 30;
+        let currentTime = setInterval(function() {
+            gameTimer.innerText = `Time left: ${startTime} secs`;
+            startTime--;
+            if (startTime === 0) {
+                startTime = 0;
+                clearInterval(currentTime);
+                alert(`Your Time is up, Dingus! Your score is ${startScore} points!`);
+                toggleMole("none");
+            } else ;
+        }, 1000);
+        toggleMole("initial");
+        setInterval(moveHole, 1000);
+    };
+
+    function addPoint() {
+        startScore++;
+        currentScore.innerText = `${startScore} Points`;
+    }
+
+    start.addEventListener('click', startGo);
+    critter.addEventListener('click', addPoint);
 };
 
-function startGo() {
-    setInterval(moveHole, 1000);
-    startTime = 30;
-    //gameTimer.innerText = `Time left: ${startTime} secs`;
-    let currentTime = setInterval(function() {
-        gameTimer.innerText = `Time left: ${startTime} secs`;
-        startTime-=1;
-        if (startTime === 0) {
-            clearInterval(currentTime);
-            alert('Your Time is up, Dingus!');
-        } else ;
-    }, 1000);
-    //setInterval(moveHole, 700);
-};
-
-function addPoint() {
-    startScore +=1;
-    currentScore.innerText = `${startScore} Points`;
-}
-
-start.addEventListener('click', startGo);
-critter.addEventListener('click', addPoint);
+main();
